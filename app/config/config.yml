@@ -103,7 +103,7 @@ hwi_oauth:
             type: "google"
             client_id: "%google_client_id%"
             client_secret: "%google_secret%"
-            scope: "email"
+            scope: "email https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/admin.directory.resource.calendar"
             options:
                 display: "page"
                 access_type: "online"

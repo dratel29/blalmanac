@@ -1,5 +1,20 @@
 imports:
 
 parameters:
+    app.apcu.class: AppBundle\Services\Apcu
+    app.google.class: AppBundle\Services\Google
+    app.google.listener.class: AppBundle\EventListener\GoogleListener
 
 services:
+    app.apcu:
+        class: '%app.apcu.class%'
+
+    app.google:
+        class: '%app.google.class%'
+        parent: "base.service"
+
+    app.google.listener:
+        class: '%app.google.listener.class%'
+        parent: "base.service"
+        tags:
+            - { name: kernel.event_subscriber }

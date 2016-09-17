@@ -37,7 +37,9 @@
       "friendsofsymfony/user-bundle": "~2.0@dev",
       "easycorp/easy-security-bundle": "^1.0",
       "egeloen/ckeditor-bundle": "^4.0",
-      "exercise/htmlpurifier-bundle": "^0.2.3"
+      "exercise/htmlpurifier-bundle": "^0.2.3",
+      "google/apiclient": "1.0.*@beta",
+      "guzzlehttp/guzzle": "^6.2"
    },
    "require-dev": {
       "sensio/generator-bundle": "^3.0",
