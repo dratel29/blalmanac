@@ -18,9 +18,17 @@ class DefaultController extends BaseController
      */
     public function indexAction(Request $request)
     {
-        $list = $this->get('app.google')->listRooms();
+//        $list = $this->get('app.google')->listRooms();
+//        \Symfony\Component\VarDumper\VarDumper::dump($list);
+//        die();
+
+        $list = $this->get('app.google')->listEvents('comuto.com_373335383233312d383638@resource.calendar.google.com');
+        $free = $this->get('app.calendar')->getStatus($list);
+
+        \Symfony\Component\VarDumper\VarDumper::dump($free);
         \Symfony\Component\VarDumper\VarDumper::dump($list);
         die();
+
 
 
 //        $service = new \Google_Service_Directory($client);

@@ -4,6 +4,7 @@ parameters:
     app.apcu.class: AppBundle\Services\Apcu
     app.google.class: AppBundle\Services\Google
     app.google.listener.class: AppBundle\EventListener\GoogleListener
+    app.calendar.class: AppBundle\Services\Calendar
 
 services:
     app.apcu:
@@ -18,3 +19,7 @@ services:
         parent: "base.service"
         tags:
             - { name: kernel.event_subscriber }
+
+    app.calendar:
+        class: '%app.calendar.class%'
+        parent: "base.service"
