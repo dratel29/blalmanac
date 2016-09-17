@@ -9,14 +9,17 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class DefaultController extends BaseController
+/**
+ * @Route("/admin")
+ */
+class AdminController extends BaseController
 {
     /**
-     * @Route("/", name="home")
+     * @Route("/boards", name="admin_baords")
      * @Template()
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_ADMIN')")
      */
-    public function indexAction(Request $request)
+    public function boardsAction(Request $request)
     {
 //        $list = $this->get('app.google')->listRooms();
 //        \Symfony\Component\VarDumper\VarDumper::dump($list);
@@ -29,21 +32,6 @@ class DefaultController extends BaseController
 //        \Symfony\Component\VarDumper\VarDumper::dump($list);
 //        die();
 //
-
-
-//        $service = new \Google_Service_Directory($client);
-//        $service->resource->
-//
-//        $service = new \Google_Service_Calendar($client);
-//        $list = $service->calendarList->listCalendarList();
-//        \Symfony\Component\VarDumper\VarDumper::dump($list);
-//        die();
-//
-//        $calendars = [];
-//        foreach ($list->getItems() as $entry) {
-//            $calendars[$entry->getId()] = $entry->getSummary();
-//        }
-
 
         return array();
     }

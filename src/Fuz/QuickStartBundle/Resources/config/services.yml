@@ -24,6 +24,7 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@fos_user.user_manager'
+            - '%admins%'
 
     hwi_oauth.account.connector:
         class: '%hwi_oauth.account.connector.class%'

@@ -11,11 +11,13 @@ class OAuthUserProvider extends BaseUserProvider
 {
     protected $userRepository;
     protected $userManager;
+    protected $admins;
 
-    public function __construct(EntityManagerInterface $em, UserManagerInterface $userManager)
+    public function __construct(EntityManagerInterface $em, UserManagerInterface $userManager, array $admins)
     {
         $this->userRepository = $em->getRepository('FuzQuickStartBundle:User');
-        $this->userManager = $userManager;
+        $this->userManager    = $userManager;
+        $this->admins         = $admins;
     }
 
     public function loadUserByUsername($username)
@@ -27,11 +29,12 @@ class OAuthUserProvider extends BaseUserProvider
 
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
-        $resourceOwner = $response->getResourceOwner()->getName();
+        $resourceOwner   = $response->getResourceOwner()->getName();
         $resourceOwnerId = $response->getUsername();
-        $contact = $response->getEmail();
-        $name = $this->getNameToDisplay($resourceOwner, $response);
-        $json = json_encode(array($resourceOwner, $resourceOwnerId));
+        $name            = $this->getNameToDisplay($resourceOwner, $response);
+        $contact         = $response->getEmail();
+        $json            = json_encode(array($resourceOwner, $resourceOwnerId));
+
         $user = $this->userRepository->getUserByResourceOwnerId($resourceOwner, $resourceOwnerId);
 
         if (is_null($user)) {
@@ -44,16 +47,20 @@ class OAuthUserProvider extends BaseUserProvider
             $user->setContact($contact);
             $user->setSigninCount(1);
             $this->userManager->updateUser($user);
-
-            return $this->loadUserByUsername($json);
+            $user = $this->loadUserByUsername($json);
         } else {
             $user->setNickname($name);
             $user->setContact($contact);
             $user->setSigninCount($user->getSigninCount() + 1);
             $this->userManager->updateUser($user);
-
-            return $user;
         }
+
+        if (in_array($user->getContact(), $this->admins) && !$user->hasRole('ROLE_ADMIN')) {
+            // ¯\_(ツ)_/¯
+            $user->addRole('ROLE_ADMIN');
+        }
+
+        return $user;
     }
 
     public function getNameToDisplay($resourceOwner, $response)
