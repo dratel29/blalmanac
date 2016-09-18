@@ -13,6 +13,8 @@ php app/console assets:install web --symlink
 php app/console doctrine:schema:create
 ```
 
+Manually import `schema.sql` in your database.
+
 ## Usage
 
 
