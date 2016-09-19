@@ -4,7 +4,6 @@ namespace AppBundle\Menu;
 
 use Fuz\QuickStartBundle\Base\BaseMenu;
 use Knp\Menu\FactoryInterface;
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 
 class Builder extends BaseMenu
 {
@@ -13,12 +12,6 @@ class Builder extends BaseMenu
         $menu = $this->createMenu($factory, parent::POSITION_LEFT);
         $this->addRoute($menu, 'quickstart.menu.home', 'home');
 
-        $token = $this->container->get('security.token_storage')->getToken();
-        if ($token instanceof OAuthToken && $token->getUser()->hasRole('ROLE_ADMIN')) {
-
-            $this->addRoute($menu, 'Boards', 'admin_baords');
-
-        }
 
 
 
