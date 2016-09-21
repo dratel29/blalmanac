@@ -6,29 +6,31 @@ use AppBundle\Base\BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class DefaultController extends BaseController
 {
-
     /**
-     * @Route("/status", name="status", defaults={"criteria"=null})
+     * @Route("/status/{criteria}", name="status", defaults={"criteria"=null})
      * @Security("has_role('ROLE_USER')")
      */
-    public function statusAction($criteria)
+    public function statusAction(Request $request, $criteria)
     {
-        $rooms = $this->get('app.google')->listRooms($criteria);
-
-        foreach ($rooms as $resourceEmail => $data) {
-            $events = $this->get('app.google')->listEvents($resourceEmail);
-            if ($events) {
-                $availability         = $this->get('app.calendar')->getStatus($events);
-                $data['availability'] = $availability;
-            }
-            $rooms[$resourceEmail] = $data;
+        $check = $this->checkToken($request);
+        if ($check) {
+            return new JsonResponse([
+                'redirect' => $check,
+            ]);
         }
 
-        return new JsonResponse($rooms);
+        return new JsonResponse([
+            'date'     => $this->get('templating')->render('AppBundle:Default:_datetime.html.twig'),
+            'statuses' => $this->get('app.calendar')->getRoomsStatuses($criteria),
+            'time'     => time(),
+            'redirect' => null,
+        ]);
     }
 
     /**
@@ -36,28 +38,27 @@ class DefaultController extends BaseController
      * @Security("has_role('ROLE_USER')")
      * @Template()
      */
-    public function indexAction($criteria)
+    public function indexAction(Request $request, $criteria)
     {
-        $rooms = $this->get('app.google')->listRooms($criteria);
-
-        foreach ($rooms as $resourceEmail => $data) {
-            $events = $this->get('app.google')->listEvents($resourceEmail);
-            if ($events) {
-                $availability         = $this->get('app.calendar')->getStatus($events);
-                $data['availability'] = $availability;
-            }
-            $rooms[$resourceEmail] = $data;
+        $check = $this->checkToken($request);
+        if ($check) {
+            return new RedirectResponse($check);
         }
 
         return [
-            'rooms' => $rooms,
-        ];
-
-        // ---
-
-        return [
-            'rooms' => $this->get('app.google')->listRooms($criteria)
+            'rooms'    => $this->get('app.google')->listRooms($criteria),
+            'criteria' => $criteria,
         ];
     }
 
+    private function checkToken(Request $request)
+    {
+        $token = $this->get('security.token_storage')->getToken();
+
+        if ($token->isExpired()) {
+            $this->get('security.token_storage')->setToken();
+
+            return $this->get('hwi_oauth.security.oauth_utils')->getLoginUrl($request, 'google');
+        }
+    }
 }

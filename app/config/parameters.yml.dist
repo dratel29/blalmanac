@@ -3,9 +3,9 @@ parameters:
 
     # General
     site_url:           http://127.0.0.1:8000
-    site_brand:         QuickStart
-    site_description:   quickstart.description
-    site_default_title: quickstart.title
+    site_brand:         Blalmanac
+    site_description:   Room availability board
+    site_default_title: Room availability board
 
     # Database
     database_driver:   pdo_mysql

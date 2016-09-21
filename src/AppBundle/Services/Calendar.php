@@ -8,8 +8,7 @@ class Calendar extends BaseService
 {
     public function getStatus(array $events)
     {
-       // $time = time();
-        $time = strtotime(sprintf('2016-09-16T%s', date("H:i:s")));
+        $time = time();
 
         foreach ($events as $event) {
             if ($time >= $event['start'] && $time <= $event['end']) {
@@ -31,5 +30,28 @@ class Calendar extends BaseService
             'status' => 'free',
             'event'  => $next,
         ];
+    }
+
+    public function getRoomsStatuses($criteria = null)
+    {
+        $rooms = $this->get('app.google')->listRooms($criteria);
+
+        foreach ($rooms as $id => $data) {
+            $events = $this->get('app.google')->listEvents($data['email']);
+
+            if ($events) {
+                $availability         = $this->getStatus($events);
+                $data['availability'] = $availability;
+            } else {
+                $data['availability'] = [
+                    'status' => 'free',
+                    'event'  => null,
+                ];
+            }
+
+            $rooms[$id] = $data;
+        }
+
+        return $rooms;
     }
 }

@@ -4,25 +4,109 @@
 
 {% block body %}
 
+    <div id="date">
+        {{ include('AppBundle:Default:_datetime.html.twig') }}
+    </div>
+
+    <div id="space" class="text-center">&nbsp;</div>
+
     <table
         style="font-size: 48px;"
         class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th>Room</th>
-                <th>Test</th>
+                <th width="35%" class="text-center">Room</th>
+                <th width="65%" class="text-center" colspan="2">Meeting details</th>
             </tr>
         </thead>
         <tbody>
 
             {% for id, room in rooms %}
-                <tr>
-                    <td>{{ room.name }}</td>
-                    <td>{{ dump(room.availability) }}</td>
+                <tr id="{{ id }}">
+                    <td class="room room-name">{{ room.name }}</td>
+                    <td class="room room-details" width="45%" style="font-size: 24px;">
+                        <div class="room-event room-event-details">&nbsp;</div>
+                        <div class="room-event room-event-mate">&nbsp;</div>
+                    </td>
+                    <td class="room room-times" width="20%" style="font-size: 24px;">
+                        <div class="room-event room-event-start">&nbsp;</div>
+                        <div class="room-event room-event-end">&nbsp;</div>
+                    </td>
                 </tr>
             {% endfor %}
 
         </tbody>
     </table>
 
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            setInterval(function() {
+                refreshRoomStatuses();
+            }, 30000);
+            refreshRoomStatuses();
+        });
+
+        function refreshRoomStatuses() {
+
+            $('#space').html($('#wait').html() + '<br/>');
+
+            $.get('{{ path('status', {criteria: criteria}) }}', function(data) {
+               $('#date').html(data.date);
+
+                $.each(data.statuses, function(id, room) {
+                    $('#' + id + ' .room-event').html('');
+                    $('#' + id + ' .room').css('background-color', null);
+
+                    if (room.availability === null) {
+                        $('#' + id + ' .room-details').html('<center><em>Information not available</em></center>');
+                    } else {
+                        var isFree = room.availability.status === 'free';
+
+                        if (isFree) {
+
+                            // Green (free room)
+                            $('#' + id + ' .room').css('background-color', '#AAFFAA');
+
+                            // there will be an event today
+                            if (room.availability.event !== null) {
+
+                                // Meeting in the next 30 mins: Yellow
+                                if (room.availability.event.start - data.time < 1800) {
+                                    $('#' + id + ' .room').css('background-color', '#FFFFAA');
+                                }
+
+                            } else {
+
+                                $('#' + id + ' .room-event-details').html('No events today');
+
+                            }
+
+                        } else {
+                            // Red (busy room)
+                            $('#' + id + ' .room').css('background-color', '#FFAAAA');
+                        }
+
+                        if (room.availability.event !== null) {
+                            var startObj = new Date(room.availability.event.start * 1000);
+                            var endObj   = new Date(room.availability.event.end * 1000);
+                            var start    = startObj.toLocaleTimeString();
+                            var end      = endObj.toLocaleTimeString();
+
+                            $('#' + id + ' .room-event-details').html((isFree ? 'Next meeting: "' : 'Current meeting: "') + room.availability.event.details + '"');
+                            $('#' + id + ' .room-event-mate').html('<em>Organized by ' + room.availability.event.mate + '</em>');
+                            $('#' + id + ' .room-event-start').html((isFree ? 'Starts at ' : 'Started at') + start);
+                            $('#' + id + ' .room-event-end').html('Ends at ' + end);
+                        }
+                    }
+                });
+
+                $('#space').html('&nbsp;');
+            });
+        }
+
+    </script>
 {% endblock %}
