@@ -6,62 +6,58 @@ use AppBundle\Base\BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\Extension\Core\Type;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class DefaultController extends BaseController
 {
+
     /**
-     * @Route("/", name="home")
-     * @Template()
+     * @Route("/status", name="status", defaults={"criteria"=null})
      * @Security("has_role('ROLE_USER')")
      */
-    public function indexAction(Request $request)
+    public function statusAction($criteria)
     {
-        $rooms    = $this->get('app.google')->listRooms();
-        $criteria = $request->get('criteria');
+        $rooms = $this->get('app.google')->listRooms($criteria);
 
-        if (!is_null($criteria)) {
-            foreach ($rooms as $email => $name) {
-                if (false === strpos($name, $criteria)) {
-                    unset($rooms[$email]);
-                }
+        foreach ($rooms as $resourceEmail => $data) {
+            $events = $this->get('app.google')->listEvents($resourceEmail);
+            if ($events) {
+                $availability         = $this->get('app.calendar')->getStatus($events);
+                $data['availability'] = $availability;
             }
+            $rooms[$resourceEmail] = $data;
         }
 
-        $filter = $this
-           ->createFormBuilder(['criteria' => $criteria])
-           ->setMethod('GET')
-           ->add('criteria', TextType::class, ['label' => 'Filter rooms'])
-           ->add('Go', 'submit')
-           ->getForm()
-           ->createView()
-        ;
-
-        return ['filter' => $filter, 'rooms' => $rooms];
-
-
-//        $list = $this->get('app.google')->listEvents('comuto.com_373335383233312d383638@resource.calendar.google.com');
-//        $free = $this->get('app.calendar')->getStatus($list);
-//
-//        \Symfony\Component\VarDumper\VarDumper::dump($free);
-//        \Symfony\Component\VarDumper\VarDumper::dump($list);
-//        die();
-//
-
-
-//        $service = new \Google_Service_Directory($client);
-//        $service->resource->
-//
-//        $service = new \Google_Service_Calendar($client);
-//        $list = $service->calendarList->listCalendarList();
-//        \Symfony\Component\VarDumper\VarDumper::dump($list);
-//        die();
-//
-//        $calendars = [];
-//        foreach ($list->getItems() as $entry) {
-//            $calendars[$entry->getId()] = $entry->getSummary();
-//        }
-
+        return new JsonResponse($rooms);
     }
+
+    /**
+     * @Route("/{criteria}", name="home", defaults={"criteria"=null})
+     * @Security("has_role('ROLE_USER')")
+     * @Template()
+     */
+    public function indexAction($criteria)
+    {
+        $rooms = $this->get('app.google')->listRooms($criteria);
+
+        foreach ($rooms as $resourceEmail => $data) {
+            $events = $this->get('app.google')->listEvents($resourceEmail);
+            if ($events) {
+                $availability         = $this->get('app.calendar')->getStatus($events);
+                $data['availability'] = $availability;
+            }
+            $rooms[$resourceEmail] = $data;
+        }
+
+        return [
+            'rooms' => $rooms,
+        ];
+
+        // ---
+
+        return [
+            'rooms' => $this->get('app.google')->listRooms($criteria)
+        ];
+    }
+
 }

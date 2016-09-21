@@ -4,5 +4,25 @@
 
 {% block body %}
 
+    <table
+        style="font-size: 48px;"
+        class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Room</th>
+                <th>Test</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for id, room in rooms %}
+                <tr>
+                    <td>{{ room.name }}</td>
+                    <td>{{ dump(room.availability) }}</td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
 
 {% endblock %}

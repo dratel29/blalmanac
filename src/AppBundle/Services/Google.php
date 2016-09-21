@@ -42,9 +42,9 @@ class Google extends BaseService
         return true;
     }
 
-    public function listRooms()
+    public function listRooms($criteria = null)
     {
-        $cache = $this->get('app.apcu')->get('rooms');
+        $cache = $this->get('app.apcu')->get(sprintf('rooms|%s', $criteria));
         if ($cache) {
             return $cache;
         }
@@ -61,8 +61,19 @@ class Google extends BaseService
         $json  = json_decode($response->getBody(), true);
         $rooms = [];
         foreach ($json['items'] as $item) {
-            $rooms[$item['resourceEmail']] = $item['resourceName'];
+            if (is_null($criteria) || false !== strpos($item['resourceName'], $criteria)) {
+                $rooms[$item['resourceEmail']] = [
+                    'name'         => $item['resourceName'],
+                    'availability' => null,
+                ];
+            }
         }
+
+        uasort($rooms, function($a, $b) {
+            return strcmp($a['name'], $b['name']);
+        });
+
+        $this->get('app.apcu')->set(sprintf('rooms|%s', $criteria), $rooms);
 
         return $rooms;
     }
@@ -75,29 +86,33 @@ class Google extends BaseService
         $min = '2016-09-16T00:00:00Z';
         $max = '2016-09-16T23:59:59Z';
 
-        $response = $this->guzzle->get('https://www.googleapis.com/calendar/v3/calendars/'.urlencode($roomId).'/events', [
-            'headers' => [
-                'Authorization' => 'Bearer ' . $this->token,
-            ],
-            'query' => [
-                'timeMin'      => $min,
-                'timeMax'      => $max,
-                'singleEvents' => 'true',
-                'fields'  => 'items(creator/email,description,summary,end/dateTime,start/dateTime,status)',
-            ]
-        ]);
+        try {
+            $response = $this->guzzle->get('https://www.googleapis.com/calendar/v3/calendars/'.urlencode($roomId).'/events', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->token,
+                ],
+                'query' => [
+                    'timeMin'      => $min,
+                    'timeMax'      => $max,
+                    'singleEvents' => 'true',
+                    'fields'  => 'items(creator/email,description,summary,end/dateTime,start/dateTime,status)',
+                ]
+            ]);
+        } catch (\Exception $ex) {
+            return false;
+        }
 
         $json  = json_decode($response->getBody(), true);
 
         $events = [];
         foreach ($json['items'] as $item) {
-            if ('confirmed' !== $item['status'] || !isset($item['creator'])) {
+            if ('confirmed' !== $item['status'] || !isset($item['creator']) || !isset($item['start']) || !isset($item['end'])) {
                 continue ;
             }
 
             $events[] = [
                 'mate'   => $item['creator']['email'],
-                'reason' => $item['summary'],
+                'reason' => isset($item['summary']) ? $item['summary'] : 'Event without title',
                 'start'  => strtotime($item['start']['dateTime']),
                 'end'    => strtotime($item['end']['dateTime']),
             ];
