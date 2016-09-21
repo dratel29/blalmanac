@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class DefaultController extends BaseController
 {
     /**
-     * @Route("/status/{criteria}", name="status", defaults={"criteria"=null})
+     * @Route("/status/{criteria}", name="status", defaults={"criteria"=null}, requirements={"criteria"=".+"})
      * @Security("has_role('ROLE_USER')")
      */
     public function statusAction(Request $request, $criteria)
@@ -34,7 +34,7 @@ class DefaultController extends BaseController
     }
 
     /**
-     * @Route("/{criteria}", name="home", defaults={"criteria"=null})
+     * @Route("/{criteria}", name="home", defaults={"criteria"=null}, requirements={"criteria"=".+"})
      * @Security("has_role('ROLE_USER')")
      * @Template()
      */

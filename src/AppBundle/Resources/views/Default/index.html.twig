@@ -28,9 +28,8 @@
                         <div class="room-event room-event-details">&nbsp;</div>
                         <div class="room-event room-event-mate">&nbsp;</div>
                     </td>
-                    <td class="room room-times" width="20%" style="font-size: 24px;">
-                        <div class="room-event room-event-start">&nbsp;</div>
-                        <div class="room-event room-event-end">&nbsp;</div>
+                    <td class="room room-event room-times" width="20%" style="font-size: 24px;">
+                        &nbsp;
                     </td>
                 </tr>
             {% endfor %}
@@ -55,7 +54,13 @@
             $('#space').html($('#wait').html() + '<br/>');
 
             $.get('{{ path('status', {criteria: criteria}) }}', function(data) {
-               $('#date').html(data.date);
+
+                if (data.redirect !== null) {
+                    window.location = data.redirect;
+                    return ;
+                }
+
+                $('#date').html(data.date);
 
                 $.each(data.statuses, function(id, room) {
                     $('#' + id + ' .room-event').html('');
@@ -91,15 +96,9 @@
                         }
 
                         if (room.availability.event !== null) {
-                            var startObj = new Date(room.availability.event.start * 1000);
-                            var endObj   = new Date(room.availability.event.end * 1000);
-                            var start    = startObj.toLocaleTimeString();
-                            var end      = endObj.toLocaleTimeString();
-
                             $('#' + id + ' .room-event-details').html((isFree ? 'Next meeting: "' : 'Current meeting: "') + room.availability.event.details + '"');
                             $('#' + id + ' .room-event-mate').html('<em>Organized by ' + room.availability.event.mate + '</em>');
-                            $('#' + id + ' .room-event-start').html((isFree ? 'Starts at ' : 'Started at') + start);
-                            $('#' + id + ' .room-event-end').html('Ends at ' + end);
+                            $('#' + id + ' .room-times').html('From ' + room.availability.event.start_f + ' to ' + room.availability.event.end_f);
                         }
                     }
                 });

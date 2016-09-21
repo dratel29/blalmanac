@@ -40,7 +40,7 @@ class Google extends BaseService
         $json  = json_decode($response->getBody(), true);
         $rooms = [];
         foreach ($json['items'] as $item) {
-            if (is_null($criteria) || false !== strpos($item['resourceName'], $criteria)) {
+            if (is_null($criteria) || false !== strpos(str_replace(' ', '', $item['resourceName']), str_replace(' ', '', $criteria))) {
                 $rooms[sha1($item['resourceEmail'])] = [
                     'name'         => $item['resourceName'], // possible xss
                     'email'        => $item['resourceEmail'],
@@ -92,6 +92,8 @@ class Google extends BaseService
                 'details' => htmlentities(isset($item['summary']) ? $item['summary'] : 'Event without title'),
                 'start'   => strtotime($item['start']['dateTime']),
                 'end'     => strtotime($item['end']['dateTime']),
+                'start_f' => date("H:i", strtotime($item['start']['dateTime'])),
+                'end_f'   => date("H:i", strtotime($item['end']['dateTime'])),
             ];
         }
 
