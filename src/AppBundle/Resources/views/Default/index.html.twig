@@ -11,26 +11,21 @@
     <div id="space" class="text-center">&nbsp;</div>
 
     <table
-        style="font-size: 48px;"
+        style="font-size: 24px;"
         class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th width="35%" class="text-center">Room</th>
-                <th width="65%" class="text-center" colspan="2">Meeting details</th>
+                <th class="text-center">Room</th>
             </tr>
         </thead>
         <tbody>
 
             {% for id, room in rooms %}
                 <tr id="{{ id }}">
-                    <td class="room room-name">{{ room.name }}</td>
-                    <td class="room room-details" width="45%" style="font-size: 24px;">
-                        <div class="room-event room-event-details">&nbsp;</div>
-                        <div class="room-event room-event-mate">&nbsp;</div>
-                    </td>
-                    <td class="room room-event room-times" width="20%" style="font-size: 36px;">
-                        &nbsp;
-                    </td>
+                    <td class="room">
+		      <div class="room-name" style="font-weight: bold;">{{ room.name }}</div>
+                      <div class="room-event room-event-mate">&nbsp;</div>
+		    </td>
                 </tr>
             {% endfor %}
 
@@ -42,9 +37,6 @@
     <div class="text-center">
         <img src="https://d1ovtcjitiy70m.cloudfront.net/vi-1/images/blablacar-ridesharing-logo.png"/>
     </div>
-
-    <br/><br/>
-    <br/><br/>
 
 {% endblock %}
 
@@ -98,19 +90,17 @@
                                 // Green (free room)
                                 $('#' + id + ' .room').css('background-color', '#99FF99');
 
-                                $('#' + id + ' .room-event-details').html('No events today');
+                                $('#' + id + ' .room-event-mate').html('No events today');
 
                             }
 
                         } else {
                             // Red (busy room)
-                            $('#' + id + ' .room').css('background-color', '#FFAAAA');
+                            $('#' + id + ' .room').css('background-color', '#FFCCCC');
                         }
 
                         if (room.availability.event !== null) {
-                            $('#' + id + ' .room-event-details').html((isFree ? 'Next meeting: "' : 'Current meeting: "') + room.availability.event.details + '"');
-                            $('#' + id + ' .room-event-mate').html('<em>Organized by ' + room.availability.event.mate + '</em>');
-                            $('#' + id + ' .room-times').html('From ' + room.availability.event.start_f + ' to ' + room.availability.event.end_f);
+                            $('#' + id + ' .room-event-mate').html('Booked by <em>' + room.availability.event.mate + '</em> from ' + room.availability.event.start_f + ' to ' + room.availability.event.end_f);
                         }
                     }
                 });
