@@ -23,6 +23,7 @@ class Calendar extends BaseService
         foreach ($events as $event) {
             if ($event['start'] > $time) {
                 $next = $event;
+                break ;
             }
         }
 

@@ -50,7 +50,7 @@ class Google extends BaseService
         }
 
         uasort($rooms, function($a, $b) {
-            return strcmp($a['name'], $b['name']);
+            return strcmp(str_replace(' ', '', $a['name']), str_replace(' ', '', $b['name']));
         });
 
         $this->get('app.apcu')->set(sprintf('rooms|%s', $criteria), $rooms);
