@@ -32,11 +32,13 @@
         </tbody>
     </table>
 
-    <br/>
+   <div class="legend">
+     <div style="background-color:#FFCCCC;display:inline-block;padding:10px;margin:10px;">Busy</div>
+     <div style="background-color:#FFFFAA;display:inline-block;padding:10px;margin:10px;">Busy within <30 mins</div>
+     <div style="background-color:#AAFFAA;display:inline-block;padding:10px;margin:10px;">Free for at least 30 mins</div>
+     <div style="background-color:#CCCCFF;display:inline-block;padding:10px;margin:10px">No meeting at all today</div>
 
-    <div class="text-center">
-        <img src="https://d1ovtcjitiy70m.cloudfront.net/vi-1/images/blablacar-ridesharing-logo.png"/>
-    </div>
+   </div>
 
 {% endblock %}
 
@@ -88,7 +90,7 @@
                             } else {
 
                                 // Green (free room)
-                                $('#' + id + ' .room').css('background-color', '#99FF99');
+                                $('#' + id + ' .room').css('background-color', '#CCCCFF');
 
                                 $('#' + id + ' .room-event-mate').html('No events today');
 
