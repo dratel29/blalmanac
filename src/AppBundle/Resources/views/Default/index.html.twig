@@ -37,6 +37,15 @@
         </tbody>
     </table>
 
+    <br/>
+
+    <div class="text-center">
+        <img src="https://d1ovtcjitiy70m.cloudfront.net/vi-1/images/blablacar-ridesharing-logo.png"/>
+    </div>
+
+    <br/><br/>
+    <br/><br/>
+
 {% endblock %}
 
 {% block script %}
@@ -73,11 +82,11 @@
 
                         if (isFree) {
 
-                            // Green (free room)
-                            $('#' + id + ' .room').css('background-color', '#AAFFAA');
-
                             // there will be an event today
                             if (room.availability.event !== null) {
+
+                                // Green (free room)
+                                $('#' + id + ' .room').css('background-color', '#BBFFBB');
 
                                 // Meeting in the next 30 mins: Yellow
                                 if (room.availability.event.start - data.time < 1800) {
@@ -85,6 +94,9 @@
                                 }
 
                             } else {
+
+                                // Green (free room)
+                                $('#' + id + ' .room').css('background-color', '#99FF99');
 
                                 $('#' + id + ' .room-event-details').html('No events today');
 
