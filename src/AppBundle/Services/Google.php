@@ -92,8 +92,6 @@ class Google extends BaseService
                 'details' => htmlentities(isset($item['summary']) ? $item['summary'] : 'Event without title'),
                 'start'   => strtotime($item['start']['dateTime']),
                 'end'     => strtotime($item['end']['dateTime']),
-                'start_f' => date("H:i", strtotime($item['start']['dateTime'])),
-                'end_f'   => date("H:i", strtotime($item['end']['dateTime'])),
             ];
         }
 

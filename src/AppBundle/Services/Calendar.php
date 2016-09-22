@@ -50,8 +50,29 @@ class Calendar extends BaseService
                 ];
             }
 
+            $data['score'] = 4;
+            if ($data['availability']['status'] == 'free') {
+                if ($data['availability']['event'] == null) {
+                    $data['score'] = 1;
+                }
+                else if ($data['availability']['event']['start'] - time() >= 1800) {
+                    $data['score'] = 2;
+                }
+                else {
+                    $data['score'] = 3;
+                }
+            }
+
             $rooms[$id] = $data;
         }
+
+        uasort($rooms, function($a, $b) {
+            if ($a['score'] == $b['score']) {
+                return strcmp(str_replace(' ', '', $a['name']), str_replace(' ', '', $b['name']));
+            }
+
+            return $a['score'] > $b['score'] ? 1 : -1;
+        });
 
         return $rooms;
     }

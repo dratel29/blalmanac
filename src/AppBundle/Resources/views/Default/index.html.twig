@@ -4,41 +4,9 @@
 
 {% block body %}
 
-    <div id="date">
-        {{ include('AppBundle:Default:_datetime.html.twig') }}
-    </div>
-
-    <div id="space" class="text-center">&nbsp;</div>
-
-    <table
-        style="font-size: 24px;"
-        class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th class="text-center">Room</th>
-            </tr>
-        </thead>
-        <tbody>
-
-            {% for id, room in rooms %}
-                <tr id="{{ id }}">
-                    <td class="room">
-                        <div class="room-name" style="font-weight: bold;">{{ room.name }}</div>
-                        <div class="room-event room-event-mate">&nbsp;</div>
-                    </td>
-                </tr>
-            {% endfor %}
-
-        </tbody>
-    </table>
-
-    <div class="legend">
-        <div style="background-color:#FFCCCC;display:inline-block;padding:10px;margin:10px;font-size:20px;">Busy</div>
-        <div style="background-color:#FFFFAA;display:inline-block;padding:10px;margin:10px;font-size:20px;">Busy within <30 mins</div>
-        <div style="background-color:#BBFFBB;display:inline-block;padding:10px;margin:10px;font-size:20px;">Free for at least 30 mins</div>
-        <div style="background-color:#CCCCFF;display:inline-block;padding:10px;margin:10px;font-size:20px;">No meeting at all today</div>
-
-    </div>
+<div id="body">
+    {{ include('AppBundle:Default:_body.html.twig') }}
+</div>
 
 {% endblock %}
 
@@ -57,13 +25,20 @@
             $('#space').html($('#wait').html() + '<br/>');
 
             $.get('{{ path('status', {criteria: criteria}) }}', function (data) {
-
                 if (data.redirect !== null) {
                     window.location = data.redirect;
                     return;
                 }
 
-                $('#date').html(data.date);
+                $('#body').html(data.body);
+                $('#space').html('&nbsp;');
+            });
+        }
+
+    </script>
+{% endblock %}
+
+{#
 
                 $.each(data.statuses, function (id, room) {
                     $('#' + id + ' .room-event').html('');
@@ -91,9 +66,6 @@
 
                                 // Blue (free room)
                                 $('#' + id + ' .room').css('background-color', '#CCCCFF');
-
-                                $('#' + id + ' .room-event-mate').html('No events today');
-
                             }
 
                         } else {
@@ -102,14 +74,9 @@
                         }
 
                         if (room.availability.event !== null) {
-                            $('#' + id + ' .room-event-mate').html('Booked by <em>' + room.availability.event.mate + '</em> from ' + room.availability.event.start_f + ' to ' + room.availability.event.end_f);
+                            $('#' + id + ' .room-event-time').html(room.availability.event.start_f + ' - ' + room.availability.event.end_f);
                         }
                     }
                 });
 
-                $('#space').html('&nbsp;');
-            });
-        }
-
-    </script>
-{% endblock %}
+                #}

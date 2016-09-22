@@ -1,0 +1,77 @@
+{# Colors #}
+{% set free_all_day = '#CCCCFF' %}
+{% set free_now     = '#BBFFBB' %}
+{% set almost_busy  = '#FFFFAA' %}
+{% set busy         = '#FFCCCC' %}
+
+<div id="date">
+    <table width="100%">
+        <tr>
+            <td class="text-center">
+                <div class="text-center">
+                    <img src="https://d1ovtcjitiy70m.cloudfront.net/vi-1/images/blablacar-ridesharing-logo.png"/>
+                </div>
+            </td>
+            <td class="text-center">
+                <div class="text-center" style="font-size: 48px;">
+                    {{ 'now' | date("H:i") }}
+                </div>
+                <div class="text-center" style="font-size: 24px;">
+                    {{ 'now' | date("l d F Y") }}
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="space" class="text-center">&nbsp;</div>
+
+<div id="table">
+    <table
+        style="font-size: 30px;"
+        class="table table-bordered">
+        <tbody>
+
+            {% for id, room in rooms %}
+
+                {# Defining the room color #}
+                {% if not room.availability %}
+                    {% set row_color = null %}
+                {% else %}
+                    {% set isFree = room.availability.status == 'free' %}
+                    {% if isFree %}
+                        {% if room.availability.event %}
+                            {% set row_color = free_now %}
+                            {% if room.availability.event.start - 'now'|date('U') < 1800 %}
+                                {% set row_color = almost_busy %}
+                            {% endif %}
+                        {% else %}
+                            {% set row_color = free_all_day %}
+                        {% endif %}
+                    {% else %}
+                        {% set row_color = busy %}
+                    {% endif %}
+                {% endif %}
+
+                <tr id="{{ id }}" style="{% if row_color %}background-color: {{ row_color }};{% endif %}">
+                    <td>
+                        <div class="room-name" style="font-weight: bold;">{{ room.name }}</div>
+                    </td>
+                    <td class="text-center">
+                        {% if room.availability.event.start|default(false) %}
+                            {{ room.availability.event.start|date('H:i') }} - {{ room.availability.event.end|date('H:i') }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+<div class="legend text-center">
+    <div style="background-color:{{ free_all_day }};" class="legend-box">No meeting at all today</div>
+    <div style="background-color:{{ free_now }};" class="legend-box">Free for at least 30 mins</div>
+    <div style="background-color:{{ almost_busy }};" class="legend-box">Busy within <30 mins</div>
+    <div style="background-color:{{ busy }};" class="legend-box">Busy</div>
+</div>

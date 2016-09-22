@@ -26,9 +26,9 @@ class DefaultController extends BaseController
         }
 
         return new JsonResponse([
-            'date'     => $this->get('templating')->render('AppBundle:Default:_datetime.html.twig'),
-            'statuses' => $this->get('app.calendar')->getRoomsStatuses($criteria),
-            'time'     => time(),
+            'body'     => $this->get('templating')->render('AppBundle:Default:_body.html.twig', [
+                'rooms' => $this->get('app.calendar')->getRoomsStatuses($criteria),
+            ]),
             'redirect' => null,
         ]);
     }
