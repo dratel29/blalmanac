@@ -23,30 +23,30 @@
             {% for id, room in rooms %}
                 <tr id="{{ id }}">
                     <td class="room">
-		      <div class="room-name" style="font-weight: bold;">{{ room.name }}</div>
-                      <div class="room-event room-event-mate">&nbsp;</div>
-		    </td>
+                        <div class="room-name" style="font-weight: bold;">{{ room.name }}</div>
+                        <div class="room-event room-event-mate">&nbsp;</div>
+                    </td>
                 </tr>
             {% endfor %}
 
         </tbody>
     </table>
 
-   <div class="legend">
-     <div style="background-color:#FFCCCC;display:inline-block;padding:10px;margin:10px;font-size:20px;">Busy</div>
-     <div style="background-color:#FFFFAA;display:inline-block;padding:10px;margin:10px;font-size:20px;">Busy within <30 mins</div>
-     <div style="background-color:#BBFFBB;display:inline-block;padding:10px;margin:10px;font-size:20px;">Free for at least 30 mins</div>
-     <div style="background-color:#CCCCFF;display:inline-block;padding:10px;margin:10px;font-size:20px;">No meeting at all today</div>
+    <div class="legend">
+        <div style="background-color:#FFCCCC;display:inline-block;padding:10px;margin:10px;font-size:20px;">Busy</div>
+        <div style="background-color:#FFFFAA;display:inline-block;padding:10px;margin:10px;font-size:20px;">Busy within <30 mins</div>
+        <div style="background-color:#BBFFBB;display:inline-block;padding:10px;margin:10px;font-size:20px;">Free for at least 30 mins</div>
+        <div style="background-color:#CCCCFF;display:inline-block;padding:10px;margin:10px;font-size:20px;">No meeting at all today</div>
 
-   </div>
+    </div>
 
 {% endblock %}
 
 {% block script %}
     <script type="text/javascript">
 
-        $(document).ready(function() {
-            setInterval(function() {
+        $(document).ready(function () {
+            setInterval(function () {
                 refreshRoomStatuses();
             }, 30000);
             refreshRoomStatuses();
@@ -56,16 +56,16 @@
 
             $('#space').html($('#wait').html() + '<br/>');
 
-            $.get('{{ path('status', {criteria: criteria}) }}', function(data) {
+            $.get('{{ path('status', {criteria: criteria}) }}', function (data) {
 
                 if (data.redirect !== null) {
                     window.location = data.redirect;
-                    return ;
+                    return;
                 }
 
                 $('#date').html(data.date);
 
-                $.each(data.statuses, function(id, room) {
+                $.each(data.statuses, function (id, room) {
                     $('#' + id + ' .room-event').html('');
                     $('#' + id + ' .room').css('background-color', null);
 
