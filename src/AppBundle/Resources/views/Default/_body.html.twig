@@ -56,6 +56,7 @@
                 <tr id="{{ id }}" style="{% if row_color %}background-color: {{ row_color }};{% endif %}">
                     <td>
                         <div class="room-name" style="font-weight: bold;">{{ room.name }}</div>
+                        <div class="room-event" style="font-size: 24px;">{{ room.availability.event.details|default(' ') }}</div>
                     </td>
                     <td class="text-center">
                         {% if room.availability.event.start|default(false) %}
@@ -70,8 +71,8 @@
 </div>
 
 <div class="legend text-center">
-    <div style="background-color:{{ free_all_day }};" class="legend-box">No meetings today</div>
-    <div style="background-color:{{ free_now }};" class="legend-box">Free for at least 30 mins</div>
-    <div style="background-color:{{ almost_busy }};" class="legend-box">Busy within less than 30 mins</div>
     <div style="background-color:{{ busy }};" class="legend-box">Busy now</div>
+    <div style="background-color:{{ almost_busy }};" class="legend-box">Busy within less than 30 mins</div>
+    <div style="background-color:{{ free_now }};" class="legend-box">Free for at least 30 mins</div>
+    <div style="background-color:{{ free_all_day }};" class="legend-box">No meetings today</div>
 </div>

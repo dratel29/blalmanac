@@ -71,7 +71,7 @@ class Calendar extends BaseService
                 return strcmp(str_replace(' ', '', $a['name']), str_replace(' ', '', $b['name']));
             }
 
-            return $a['score'] > $b['score'] ? 1 : -1;
+            return $a['score'] < $b['score'] ? 1 : -1;
         });
 
         return $rooms;
