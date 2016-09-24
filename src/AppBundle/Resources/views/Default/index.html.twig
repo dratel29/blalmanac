@@ -21,7 +21,6 @@
         });
 
         function refreshRoomStatuses() {
-
             $('#space').html($('#wait').html() + '<br/>');
 
             $.get('{{ path('status', {criteria: criteria}) }}', function (data) {
