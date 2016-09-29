@@ -4,6 +4,7 @@ parameters:
     app.apcu.class: AppBundle\Services\Apcu
     app.google.class: AppBundle\Services\Google
     app.calendar.class: AppBundle\Services\Calendar
+    app.twig.room.class: AppBundle\Twig\Extension\RoomExtension
 
 services:
     app.apcu:
@@ -17,3 +18,8 @@ services:
     app.calendar:
         class: '%app.calendar.class%'
         parent: "base.service"
+
+    app.twig.room:
+       class: '%app.twig.room.class%'
+       tags:
+           - { name: twig.extension }

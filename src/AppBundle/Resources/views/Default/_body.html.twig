@@ -46,15 +46,34 @@
                     {% endif %}
                 {% endif %}
 
+                {# Splitting room name #}
+                {% set name = room.name|roomName %}
+                {% set country = room.name|roomCountry %}
+                {% set seats = room.name|roomSeats %}
+                {% set direction = room.name|roomDirection %}
+
                 <tr id="{{ id }}" style="{% if row_color %}background-color: {{ row_color }};{% endif %}">
+                    <td class="text-center" width="20">
+                        <div class="room-country">
+                            {% if country %}
+                                <img src="{{ asset('bundles/fuzquickstart/' ~ country) }}"/>
+                            {% endif %}
+                        </div>
+                    </td>
                     <td>
-                        <div class="room-name" style="font-weight: bold;">{{ room.name }}</div>
+                        <div class="room-name" style="font-weight: bold;">{{ name }}</div>
                         <div class="room-event" style="font-size: 24px;">{{ room.availability.event.details|default(' ') }}</div>
+                    </td>
+                    <td class="text-center">
+                        {{ seats }}
                     </td>
                     <td class="text-center">
                         {% if room.availability.event.start|default(false) %}
                             {{ room.availability.event.start|date('H:i') }} - {{ room.availability.event.end|date('H:i') }}
                         {% endif %}
+                    </td>
+                    <td class="text-center">
+                        {{ direction }}
                     </td>
                 </tr>
             {% endfor %}
