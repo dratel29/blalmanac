@@ -62,7 +62,15 @@
                     </td>
                     <td>
                         <div class="room-name" style="font-weight: bold;">{{ name }}</div>
+                        {#
                         <div class="room-event" style="font-size: 24px;">{{ room.availability.event.details|default(' ') }}</div>
+                        #}
+                    </td>
+                    <td>
+                        {% set email = room.availability.event.mate|default(false) %}
+                        {% if email %}
+                            <img style="border-radius:50%;width:42px;height:42px;" src="{{ email|peoplePicture }}"/> {{ email|peopleName }}
+                        {% endif %}
                     </td>
                     <td class="text-center">
                         {{ seats }}

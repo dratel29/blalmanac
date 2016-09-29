@@ -65,6 +65,9 @@ parameters:
     menu_left_enabled: true
     menu_right_enabled: true
 
+    # Photos (this url will be appended by the md5 of the trimmed email)
+    photo_prefix: ~
+
     # Admins
     admins:
         - alain.tiemblo@blablacar.com

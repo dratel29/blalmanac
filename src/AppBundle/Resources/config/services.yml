@@ -5,6 +5,7 @@ parameters:
     app.google.class: AppBundle\Services\Google
     app.calendar.class: AppBundle\Services\Calendar
     app.twig.room.class: AppBundle\Twig\Extension\RoomExtension
+    app.twig.people.class: AppBundle\Twig\Extension\PeopleExtension
 
 services:
     app.apcu:
@@ -21,5 +22,11 @@ services:
 
     app.twig.room:
        class: '%app.twig.room.class%'
+       tags:
+           - { name: twig.extension }
+
+    app.twig.people:
+       class: '%app.twig.people.class%'
+       arguments: ['%photo_prefix%']
        tags:
            - { name: twig.extension }
