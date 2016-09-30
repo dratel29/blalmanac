@@ -34,7 +34,9 @@ class Google extends BaseService
             ],
             'query'   => [
                 'maxResults' => 500,
-            ]
+            ],
+            'proxy'   => $this->getParameter('http.proxy'),
+            'timeout' => $this->getParameter('http.timeout'),
         ]);
 
         $json  = json_decode($response->getBody(), true);
@@ -73,7 +75,9 @@ class Google extends BaseService
                     'timeMax'      => $max,
                     'singleEvents' => 'true',
                     'fields'       => 'items(creator/email,description,summary,end/dateTime,start/dateTime,status)',
-                ]
+                ],
+                'proxy'   => $this->getParameter('http.proxy'),
+                'timeout' => $this->getParameter('http.timeout'),
             ]);
         } catch (\Exception $ex) {
             return false;
