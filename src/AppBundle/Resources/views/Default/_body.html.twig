@@ -4,19 +4,8 @@
 {% set almost_busy  = '#FFFFAA' %}
 {% set busy         = '#FFCCCC' %}
 
-<div id="date" class="row">
-    <div class="col-md-6 text-center">
-        <br/>
-        <img src="https://d1ovtcjitiy70m.cloudfront.net/vi-1/images/blablacar-ridesharing-logo.png"/>
-    </div>
-    <div class="col-md-6 text-center">
-        <div class="text-center" style="font-size: 60px;">
-            {{ 'now' | date("H:i") }}
-        </div>
-        <div class="text-center" style="font-size: 36px;">
-            {{ 'now' | date("l d F Y") }}
-        </div>
-    </div>
+<div class="text-center" style="padding: 25px;">
+    <img src="{{ asset('bundles/app/logo.png') }}" style="width:40%;"/>
 </div>
 
 <div id="table">
@@ -98,6 +87,12 @@
     </tr>
 
     {% endfor %}
+</table>
 </div>
 
-<div id="space" class="text-center">&nbsp;</div>
+<div class="text-center" style="font-size: 120px;">
+    {{ 'now' | date("H:i") }}
+</div>
+<div class="text-center" style="font-size: 80px;">
+    {{ 'now' | date("l d F Y") }}
+</div>
