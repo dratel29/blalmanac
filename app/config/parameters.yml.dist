@@ -68,6 +68,10 @@ parameters:
     # Photos (this url will be appended by the md5 of the trimmed email)
     photo_prefix: ~
 
+    # Proxy
+    http.proxy: null
+    http.timeout: 5
+
     # Admins
     admins:
         - alain.tiemblo@blablacar.com
