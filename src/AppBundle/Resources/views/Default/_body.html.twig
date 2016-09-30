@@ -10,10 +10,10 @@
         <img src="https://d1ovtcjitiy70m.cloudfront.net/vi-1/images/blablacar-ridesharing-logo.png"/>
     </div>
     <div class="col-md-6 text-center">
-        <div class="text-center" style="font-size: 48px;">
+        <div class="text-center" style="font-size: 60px;">
             {{ 'now' | date("H:i") }}
         </div>
-        <div class="text-center" style="font-size: 24px;">
+        <div class="text-center" style="font-size: 36px;">
             {{ 'now' | date("l d F Y") }}
         </div>
     </div>
@@ -50,7 +50,7 @@
         </table>
         {% endif %}
         <table
-            style="font-size: 30px;"
+            style="font-size: 38px;"
             class="table">
             {% if row_color %}
                 <thead>
@@ -75,33 +75,25 @@
 
     {# Splitting room name #}
     {% set name = room.name|roomName %}
-    {% set country = room.name|roomCountry %}
     {% set seats = room.name|roomSeats %}
 
     <tr id="{{ id }}">
-        <td class="text-center">
-            <div class="room-country">
-                {% if country %}
-                    <img src="{{ asset('bundles/fuzquickstart/' ~ country) }}"/>
-                {% endif %}
-            </div>
-        </td>
         <td style="width:40%;">
             <div class="room-name" style="font-weight: bold;">{{ name }}</div>
             {#
             <div class="room-event" style="font-size: 24px;">{{ room.availability.event.details|default(' ') }}</div>
             #}
         </td>
-        <td style="width:40%;">
+        <td style="width:30%;">
             {% set email = room.availability.event.mate|default(false) %}
             {% if email %}
-                <img style="border-radius:50%;width:42px;height:42px;" src="{{ email|peoplePicture }}"/> {{ email|peopleName }}
+                <img style="border-radius:50%;width:50px;height:50px;" src="{{ email|peoplePicture }}"/> {{ email|peopleName }}
             {% endif %}
         </td>
         <td style="width:5%;" class="text-center">
             {{ seats }}
         </td>
-        <td style="width:19%;" class="text-center">
+        <td style="width:29%;" class="text-center">
             {% if room.availability.event.start|default(false) %}
                 {{ room.availability.event.start|date('H:i') }} - {{ room.availability.event.end|date('H:i') }}
             {% endif %}
