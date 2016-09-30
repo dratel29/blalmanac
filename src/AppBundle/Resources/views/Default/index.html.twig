@@ -21,8 +21,6 @@
         });
 
         function refreshRoomStatuses() {
-            $('#space').html($('#wait').html() + '<br/>');
-
             $.get('{{ path('status', {criteria: criteria}) }}', function (data) {
                 if (data.redirect !== null) {
                     window.location = data.redirect;
@@ -30,7 +28,6 @@
                 }
 
                 $('#body').html(data.body);
-                $('#space').html('&nbsp;');
             });
         }
 
