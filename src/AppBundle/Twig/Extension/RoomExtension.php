@@ -10,7 +10,6 @@ class RoomExtension extends \Twig_Extension
             new \Twig_SimpleFilter('roomName', [$this, 'roomName']),
             new \Twig_SimpleFilter('roomCountry', [$this, 'roomCountry']),
             new \Twig_SimpleFilter('roomSeats', [$this, 'roomSeats']),
-            new \Twig_SimpleFilter('roomDirection', [$this, 'roomDirection']),
         ];
     }
 
@@ -40,15 +39,6 @@ class RoomExtension extends \Twig_Extension
 
         if (isset($tokens[1])) {
             return trim($tokens[1]);
-        }
-    }
-
-    public function roomDirection($roomName)
-    {
-        $tokens = explode('/', $roomName);
-
-        if (isset($tokens[2])) {
-            return trim($tokens[2]);
         }
     }
 

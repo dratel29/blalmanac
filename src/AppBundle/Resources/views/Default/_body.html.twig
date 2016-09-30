@@ -20,81 +20,95 @@
 </div>
 
 <div id="table">
-    <table
-        style="font-size: 30px;"
-        class="table table-bordered">
-        <tbody>
 
-            {% for id, room in rooms %}
+{% set current_color = '¯\_(ツ)_/¯' %}
 
-                {# Defining the room color #}
-                {% if not room.availability %}
-                    {% set row_color = null %}
-                {% else %}
-                    {% set isFree = room.availability.status == 'free' %}
-                    {% if isFree %}
-                        {% if room.availability.event %}
-                            {% set row_color = free_now %}
-                            {% if room.availability.event.start - 'now'|date('U') < 1800 %}
-                                {% set row_color = almost_busy %}
-                            {% endif %}
-                        {% else %}
-                            {% set row_color = free_all_day %}
-                        {% endif %}
-                    {% else %}
-                        {% set row_color = busy %}
-                    {% endif %}
+{% for id, room in rooms %}
+
+    {# Defining the room color #}
+    {% if not room.availability %}
+        {% set row_color = null %}
+    {% else %}
+        {% set isFree = room.availability.status == 'free' %}
+        {% if isFree %}
+            {% if room.availability.event %}
+                {% set row_color = free_now %}
+                {% if room.availability.event.start - 'now'|date('U') < 1800 %}
+                    {% set row_color = almost_busy %}
                 {% endif %}
+            {% else %}
+                {% set row_color = free_all_day %}
+            {% endif %}
+        {% else %}
+            {% set row_color = busy %}
+        {% endif %}
+    {% endif %}
 
-                {# Splitting room name #}
-                {% set name = room.name|roomName %}
-                {% set country = room.name|roomCountry %}
-                {% set seats = room.name|roomSeats %}
-                {% set direction = room.name|roomDirection %}
-
-                <tr id="{{ id }}" style="{% if row_color %}background-color: {{ row_color }};{% endif %}">
-                    <td class="text-center" width="20">
-                        <div class="room-country">
-                            {% if country %}
-                                <img src="{{ asset('bundles/fuzquickstart/' ~ country) }}"/>
+    {% if row_color != current_color %}
+        {% if current_color != '¯\_(ツ)_/¯' %}
+            </tbody>
+        </table>
+        {% endif %}
+        <table
+            style="font-size: 30px;"
+            class="table table-bordered">
+            {% if row_color %}
+                <thead>
+                    <tr>
+                        <th colspan="5" class="text-center">
+                            {% if row_color == free_all_day %}
+                                <div style="background-color:{{ free_all_day }};">No meetings today</div>
+                            {% elseif row_color == free_now %}
+                                <div style="background-color:{{ free_now }};">Free for at least 30 mins</div>
+                            {% elseif row_color == almost_busy %}
+                                <div style="background-color:{{ almost_busy }};">Busy within less than 30 mins</div>
+                            {% else  %}
+                                <div style="background-color:{{ busy }};">Busy now</div>
                             {% endif %}
-                        </div>
-                    </td>
-                    <td>
-                        <div class="room-name" style="font-weight: bold;">{{ name }}</div>
-                        {#
-                        <div class="room-event" style="font-size: 24px;">{{ room.availability.event.details|default(' ') }}</div>
-                        #}
-                    </td>
-                    <td>
-                        {% set email = room.availability.event.mate|default(false) %}
-                        {% if email %}
-                            <img style="border-radius:50%;width:42px;height:42px;" src="{{ email|peoplePicture }}"/> {{ email|peopleName }}
-                        {% endif %}
-                    </td>
-                    <td class="text-center">
-                        {{ seats }}
-                    </td>
-                    <td class="text-center">
-                        {% if room.availability.event.start|default(false) %}
-                            {{ room.availability.event.start|date('H:i') }} - {{ room.availability.event.end|date('H:i') }}
-                        {% endif %}
-                    </td>
-                    <td class="text-center">
-                        {{ direction }}
-                    </td>
-                </tr>
-            {% endfor %}
+                        </th>
+                    </tr>
+                </thead>
+            {% endif %}
+            <tbody>
+        {% set current_color = row_color %}
+    {% endif %}
 
-        </tbody>
-    </table>
-</div>
+    {# Splitting room name #}
+    {% set name = room.name|roomName %}
+    {% set country = room.name|roomCountry %}
+    {% set seats = room.name|roomSeats %}
 
-<div class="legend text-center">
-    <div style="background-color:{{ busy }};" class="legend-box">Busy now</div>
-    <div style="background-color:{{ almost_busy }};" class="legend-box">Busy within less than 30 mins</div>
-    <div style="background-color:{{ free_now }};" class="legend-box">Free for at least 30 mins</div>
-    <div style="background-color:{{ free_all_day }};" class="legend-box">No meetings today</div>
+    <tr id="{{ id }}">
+        <td class="text-center">
+            <div class="room-country">
+                {% if country %}
+                    <img src="{{ asset('bundles/fuzquickstart/' ~ country) }}"/>
+                {% endif %}
+            </div>
+        </td>
+        <td style="width:40%;">
+            <div class="room-name" style="font-weight: bold;">{{ name }}</div>
+            {#
+            <div class="room-event" style="font-size: 24px;">{{ room.availability.event.details|default(' ') }}</div>
+            #}
+        </td>
+        <td style="width:40%;">
+            {% set email = room.availability.event.mate|default(false) %}
+            {% if email %}
+                <img style="border-radius:50%;width:42px;height:42px;" src="{{ email|peoplePicture }}"/> {{ email|peopleName }}
+            {% endif %}
+        </td>
+        <td style="width:5%;" class="text-center">
+            {{ seats }}
+        </td>
+        <td style="width:19%;" class="text-center">
+            {% if room.availability.event.start|default(false) %}
+                {{ room.availability.event.start|date('H:i') }} - {{ room.availability.event.end|date('H:i') }}
+            {% endif %}
+        </td>
+    </tr>
+
+    {% endfor %}
 </div>
 
 <div id="space" class="text-center">&nbsp;</div>
