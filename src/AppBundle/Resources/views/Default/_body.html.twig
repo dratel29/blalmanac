@@ -50,7 +50,7 @@
         </table>
         {% endif %}
         <table
-            style="font-size: 38px;"
+            style="font-size: 48px;"
             class="table">
             {% if row_color %}
                 <thead>
@@ -78,11 +78,8 @@
     {% set seats = room.name|roomSeats %}
 
     <tr id="{{ id }}">
-        <td style="width:40%;">
+        <td style="width:40%;padding-left: 20px;">
             <div class="room-name" style="font-weight: bold;">{{ name }}</div>
-            {#
-            <div class="room-event" style="font-size: 24px;">{{ room.availability.event.details|default(' ') }}</div>
-            #}
         </td>
         <td style="width:30%;">
             {% set email = room.availability.event.mate|default(false) %}
