@@ -31,6 +31,7 @@ twig:
     form_themes:
         - "BraincraftedBootstrapBundle:Form:bootstrap.html.twig"
     globals:
+        booking_enabled: %booking_enabled%
         fuz:
             site_brand: "%site_brand%"
             site_description: "%site_description%"

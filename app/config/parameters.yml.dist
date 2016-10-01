@@ -72,6 +72,9 @@ parameters:
     http.proxy: null
     http.timeout: 5
 
+    # Allow to book a room
+    booking_enabled: true
+
     # Admins
     admins:
         - alain.tiemblo@blablacar.com

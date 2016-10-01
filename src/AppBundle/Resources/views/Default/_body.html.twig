@@ -80,7 +80,7 @@
             {{ seats }}
         </td>
         <td style="width:10%;" class="text-center">
-            {% if room.booking %}
+            {% if booking_enabled and room.booking %}
                 {% set slots %}
 
                     <div class="text-center">

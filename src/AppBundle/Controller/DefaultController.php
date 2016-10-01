@@ -43,7 +43,9 @@ class DefaultController extends BaseController
         $email = $request->request->get('email');
         $time  = $request->request->get('time');
 
-        $this->get('app.google')->book($email, $time);
+        if ($this->getParameter('booking_enabled')) {
+            $this->get('app.google')->book($email, $time);
+        }
 
         return new Response();
     }
