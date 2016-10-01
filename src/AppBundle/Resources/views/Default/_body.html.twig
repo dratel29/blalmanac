@@ -44,7 +44,7 @@
             {% if row_color %}
                 <thead>
                     <tr>
-                        <th colspan="5" class="text-center">
+                        <th colspan="6" class="text-center">
                             {% if row_color == free_all_day %}
                                 <div style="background-color:{{ free_all_day }};">No meetings today</div>
                             {% elseif row_color == free_now %}
@@ -67,7 +67,7 @@
     {% set seats = room.name|roomSeats %}
 
     <tr id="{{ id }}">
-        <td style="width:40%;padding-left: 20px;">
+        <td style="width:30%;padding-left: 20px;">
             <div class="room-name" style="font-weight: bold;">{{ name }}</div>
         </td>
         <td style="width:30%;">
@@ -76,10 +76,62 @@
                 <img style="border-radius:50%;width:50px;height:50px;" src="{{ email|peoplePicture }}"/> {{ email|peopleName }}
             {% endif %}
         </td>
-        <td style="width:5%;" class="text-center">
+        <td style="width:10%;" class="text-center">
             {{ seats }}
         </td>
-        <td style="width:29%;" class="text-center">
+        <td style="width:10%;" class="text-center">
+            {% if room.booking %}
+                {% set slots %}
+
+                    <div class="text-center">
+                        <p style="font-size: 25px;">It is now</p>
+                        <p style="font-size: 65px;">{{ 'now' | date("H:i") }}</p>
+                        <br/>
+                        <p style="font-size: 35px;">Book {{ name }} until...</p>
+                    </div>
+
+                    <table style="width: 100%;">
+                        {% for key, slot in room.booking %}
+                            {% if key % 2 == 0 %}
+                                {% if key != 0 %}
+                                    </tr>
+                                {% endif %}
+                                <tr>
+                            {% endif %}
+                            <td class="text-center">
+                                <button
+                                    type="button"
+                                    class="btn btn-primary domajax click"
+                                    data-dismiss="modal"
+                                    data-email="{{ room.email }}"
+                                    data-time="{{ slot.time }}"
+                                    data-endpoint="{{ path('book') }}"
+                                    data-input-attr="email time"
+                                    data-script-before="$('#book-{{ id }}').remove();"
+                                    style="width: 80%; margin: 10px;"
+                                >
+                                    <span style="font-size: 35px;">{{ slot.time }}</span>
+                                    <br/>
+                                    <span style="font-size: 20px;">{{ slot.duration }}</span>
+                                </button>
+                            </td>
+                        {% endfor %}
+                        </tr>
+                    </table>
+
+                {% endset %}
+                <button
+                    id="book-{{ id }}"
+                    class="book btn btn-primary"
+                    style="font-size: 30px;"
+                    data-name="{{ name|e('html_attr') }}"
+                    data-slot="{{ slots|e('html_attr') }}"
+                >Book Now</button>
+            {% else %}
+                &nbsp;
+            {% endif %}
+        </td>
+        <td style="width:20%;" class="text-center">
             {% if room.availability.event.start|default(false) %}
                 {{ room.availability.event.start|date('H:i') }} - {{ room.availability.event.end|date('H:i') }}
             {% endif %}
@@ -98,3 +150,4 @@
 <div class="text-center" style="font-size: 80px;">
     {{ 'now' | date("l d F Y") }}
 </div>
+

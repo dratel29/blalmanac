@@ -4,6 +4,7 @@ namespace AppBundle\Services;
 
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Fuz\QuickStartBundle\Base\BaseService;
+use GuzzleHttp\Exception\ClientException;
 
 class Google extends BaseService
 {
@@ -47,6 +48,7 @@ class Google extends BaseService
                     'name'         => $item['resourceName'], // possible xss
                     'email'        => $item['resourceEmail'],
                     'availability' => null,
+                    'booking'      => null,
                 ];
             }
         }
@@ -79,7 +81,7 @@ class Google extends BaseService
                 'proxy'   => $this->getParameter('http.proxy'),
                 'timeout' => $this->getParameter('http.timeout'),
             ]);
-        } catch (\Exception $ex) {
+        } catch (ClientException $ex) {
             return false;
         }
 
@@ -104,5 +106,41 @@ class Google extends BaseService
         });
 
         return $events;
+    }
+
+    public function book($email, $time)
+    {
+        $nowTime   = time();
+        $untilTime = strtotime($time);
+
+        if ($nowTime > $untilTime) {
+            return ;
+        }
+
+        $start = \DateTime::createFromFormat("U", $nowTime)->format(\DateTime::RFC3339);
+        $end   = \DateTime::createFromFormat("U", $untilTime)->format(\DateTime::RFC3339);
+
+        try {
+            $response = $this->guzzle->post('https://www.googleapis.com/calendar/v3/calendars/primary/events', [
+                'headers' => [
+                    'Authorization' => 'Bearer '.$this->token,
+                ],
+                'json'    => [
+                    'attendees' => [
+                        ['email' => $email],
+                    ],
+                    'start'     => [
+                        'dateTime' => $start,
+                    ],
+                    'end'       => [
+                        'dateTime' => $end,
+                    ],
+                ],
+                'proxy'   => $this->getParameter('http.proxy'),
+                'timeout' => $this->getParameter('http.timeout'),
+            ]);
+        } catch (ClientException $ex) {
+            return false;
+        }
     }
 }

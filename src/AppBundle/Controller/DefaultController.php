@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends BaseController
 {
@@ -31,6 +32,20 @@ class DefaultController extends BaseController
             ]),
             'redirect' => null,
         ]);
+    }
+
+    /**
+     * @Route("/book", name="book")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function bookAction(Request $request)
+    {
+        $email = $request->request->get('email');
+        $time  = $request->request->get('time');
+
+        $this->get('app.google')->book($email, $time);
+
+        return new Response();
     }
 
     /**

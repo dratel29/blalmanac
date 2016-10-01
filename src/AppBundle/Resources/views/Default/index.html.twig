@@ -4,9 +4,25 @@
 
 {% block body %}
 
-<div id="body">
+<div id="content">
     {{ include('AppBundle:Default:_body.html.twig') }}
 </div>
+
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="booking" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <div class="book-slot"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" title="Close the window">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button id="open-modal" class="hide" arial-hidden="true" data-toggle="modal" data-target="#modal">Open</button>
 
 {% endblock %}
 
@@ -27,9 +43,16 @@
                     return;
                 }
 
-                $('#body').html(data.body);
+                $('#content').html(data.body);
             });
         }
+
+        $('body').on('click', '.book', function() {
+            var that = $(this);
+            $('.book-name').html(that.data('name'));
+            $('.book-slot').html(that.data('slot'));
+            $('#open-modal').click();
+        });
 
     </script>
 {% endblock %}
