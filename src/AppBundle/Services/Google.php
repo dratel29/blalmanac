@@ -126,6 +126,7 @@ class Google extends BaseService
                     'Authorization' => 'Bearer '.$this->token,
                 ],
                 'json'    => [
+                    'description' => 'Rooms baord booking',
                     'attendees' => [
                         ['email' => $email],
                     ],
