@@ -3,7 +3,7 @@ blalmanac
 
 ## What is it?
 
-![dahsboard](http://ocarina.fr/medias/blalmanac2.jpg)
+![dahsboard](http://ocarina.fr/medias/blalmanac4.jpg)
 
 ## Installation
 
