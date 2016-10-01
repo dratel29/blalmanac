@@ -94,7 +94,11 @@ class Calendar extends BaseService
         }
 
         $booking = [];
-        for ($i = strtotime(date('H:00', $time)); $i <= $start; $i += 1800) {
+        for ($i = strtotime(date('H:00', $time)); $i <= $start || $i - 1800 < $start; $i += 1800) {
+            if ($i > $start) {
+                $i = $start;
+            }
+
             if ($i > $time) {
 
                 $duration = $i - $time;
