@@ -26,8 +26,10 @@ class PeopleExtension extends \Twig_Extension
 
     public function peopleName($email)
     {
+        if (stripos($email, 'dashboard') !== false) {
+            return 'On Board';
+        }
         $tokens = explode('.', $email);
-
         return ucfirst($tokens[0]);
     }
 
