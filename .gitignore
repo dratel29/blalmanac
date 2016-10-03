@@ -14,4 +14,4 @@ vendor/
 bin/
 composer.phar
 TODO
-deploy.sh
+release.sh
