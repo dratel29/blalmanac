@@ -1,6 +1,30 @@
 {% extends 'AppBundle::layout.html.twig' %}
 
-{% block head %}{% endblock %}
+{% block head %}
+
+<style>
+.modal {
+  text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+  .modal:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+  }
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+  width:80%;
+}
+</style>
+
+{% endblock %}
 
 {% block body %}
 
@@ -16,7 +40,7 @@
                 <div class="book-slot"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" title="Close the window">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" title="Close the window" style="font-size: 40px;">Close</button>
             </div>
         </div>
     </div>

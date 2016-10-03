@@ -70,10 +70,10 @@
         <td style="width:30%;padding-left: 20px;">
             <div class="room-name" style="font-weight: bold;">{{ name }}</div>
         </td>
-        <td style="width:30%;">
+        <td style="width:25%;">
             {% set email = room.availability.event.mate|default(false) %}
             {% if email %}
-                <img style="border-radius:50%;width:50px;height:50px;" src="{{ email|peoplePicture }}"/> {{ email|peopleName }}
+                <img style="border-radius:50%;width:50px;height:50px;font-size:40px;" src="{{ email|peoplePicture }}"/> {{ email|peopleName }}
             {% endif %}
         </td>
         <td style="width:10%;" class="text-center">
@@ -84,10 +84,10 @@
                 {% set slots %}
 
                     <div class="text-center">
-                        <p style="font-size: 25px;">It is now</p>
-                        <p style="font-size: 65px;">{{ 'now' | date("H:i") }}</p>
+                        <p style="font-size: 45px;">It is now</p>
+                        <p style="font-size: 85px;">{{ 'now' | date("H:i") }}</p>
                         <br/>
-                        <p style="font-size: 35px;">Book {{ name }} until...</p>
+                        <p style="font-size: 55px;">Book {{ name }} until...</p>
                     </div>
 
                     <table style="width: 100%;">
@@ -110,9 +110,9 @@
                                     data-script-before="$('#book-{{ id }}').remove();"
                                     style="width: 80%; margin: 10px;"
                                 >
-                                    <span style="font-size: 35px;">{{ slot.time }}</span>
+                                    <span style="font-size: 55px;">{{ slot.time }}</span>
                                     <br/>
-                                    <span style="font-size: 20px;">{{ slot.duration }}</span>
+                                    <span style="font-size: 40px;">{{ slot.duration }}</span>
                                 </button>
                             </td>
                         {% endfor %}
@@ -131,7 +131,7 @@
                 &nbsp;
             {% endif %}
         </td>
-        <td style="width:20%;" class="text-center">
+        <td style="width:25%;" class="text-center">
             {% if room.availability.event.start|default(false) %}
                 {{ room.availability.event.start|date('H:i') }} - {{ room.availability.event.end|date('H:i') }}
             {% endif %}
@@ -150,4 +150,3 @@
 <div class="text-center" style="font-size: 80px;">
     {{ 'now' | date("l d F Y") }}
 </div>
-
