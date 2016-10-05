@@ -39,12 +39,12 @@
         </table>
         {% endif %}
         <table
-            style="font-size: 48px;"
+            style="font-size: 28px;"
             class="table">
             {% if row_color %}
                 <thead>
                     <tr>
-                        <th colspan="6" class="text-center">
+                        <th colspan="6" class="text-center" style="padding:0px;">
                             {% if row_color == free_all_day %}
                                 <div style="background-color:{{ free_all_day }};">No meetings today</div>
                             {% elseif row_color == free_now %}
@@ -123,7 +123,7 @@
                 <button
                     id="book-{{ id }}"
                     class="book btn btn-primary"
-                    style="font-size: 30px;"
+                    style="font-size: 25px;"
                     data-name="{{ name|e('html_attr') }}"
                     data-slot="{{ slots|e('html_attr') }}"
                 >Book Now</button>
@@ -144,9 +144,9 @@
 
 <div style="border-top:1px solid grey;">&nbsp;</div>
 
-<div class="text-center" style="font-size: 120px;">
+<div class="text-center" style="font-size: 100px;">
     {{ 'now' | date("H:i") }}
 </div>
-<div class="text-center" style="font-size: 80px;">
+<div class="text-center" style="font-size: 60px;">
     {{ 'now' | date("l d F Y") }}
 </div>

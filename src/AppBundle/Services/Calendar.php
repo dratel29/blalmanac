@@ -53,16 +53,16 @@ class Calendar extends BaseService
                 $data['booking'] = $this->getBookingOptions(null);
             }
 
-            $data['score'] = 4;
+            $data['score'] = 1;
             if ($data['availability']['status'] == 'free') {
                 if ($data['availability']['event'] == null) {
-                    $data['score'] = 1;
+                    $data['score'] = 4;
                 }
                 else if ($data['availability']['event']['start'] - time() >= 1800) {
-                    $data['score'] = 2;
+                    $data['score'] = 3;
                 }
                 else {
-                    $data['score'] = 3;
+                    $data['score'] = 2;
                 }
             }
 
