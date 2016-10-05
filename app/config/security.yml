@@ -29,7 +29,7 @@ security:
                     google: "/login/check-google"
                     facebook: "/login/check-facebook"
                     twitter: "/login/check-twitter"
-                login_path: "/login"
+                login_path: "/connect/google"
                 failure_path: "/login"
                 default_target_path: "/welcome"
                 oauth_user_provider:
