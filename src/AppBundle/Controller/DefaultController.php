@@ -26,9 +26,15 @@ class DefaultController extends BaseController
             ]);
         }
 
+	$ipad = false;
+	if ($request->get('ipad')) {
+	   $ipad = true;
+	}
+
         return new JsonResponse([
             'body'     => $this->get('templating')->render('AppBundle:Default:_body.html.twig', [
                 'rooms' => $this->get('app.calendar')->getRoomsStatuses($criteria),
+		'ipad'  => intval($ipad),
             ]),
             'redirect' => null,
         ]);
@@ -62,9 +68,15 @@ class DefaultController extends BaseController
             return new RedirectResponse($check);
         }
 
+	$ipad = false;
+	if ($request->get('ipad')) {
+	   $ipad = true;
+	}
+
         return [
             'rooms'    => $this->get('app.google')->listRooms($criteria),
             'criteria' => $criteria,
+	    'ipad'     => intval($ipad),
         ];
     }
 

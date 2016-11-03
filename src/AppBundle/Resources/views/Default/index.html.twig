@@ -61,7 +61,7 @@
         });
 
         function refreshRoomStatuses() {
-            $.get('{{ path('status', {criteria: criteria}) }}', function (data) {
+            $.get('{{ path('status', {criteria: criteria, ipad: ipad}) }}', function (data) {
                 if (data.redirect !== null) {
                     window.location = data.redirect;
                     return;
