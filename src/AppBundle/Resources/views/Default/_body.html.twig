@@ -92,16 +92,23 @@
         <td style="width:30%;padding-left: 20px;">
             <div class="room-name" style="font-weight: bold;">{{ name }}</div>
         </td>
-        <td style="width:25%;">
-            {% set email = room.availability.event.mate|default(false) %}
-            {% if email %}
-                <img style="border-radius:50%;width:50px;height:50px;font-size:40px;" src="{{ email|peoplePicture }}"/> {{ email|peopleName }}
+        <td style="width:35%;">
+            {% if not room.booking %}
+                {% set email = room.availability.event.mate|default(false) %}
+                {% if email %}
+                    <img style="border-radius:50%;width:50px;height:50px;font-size:40px;" src="{{ email|peoplePicture }}"/> {{ email|peopleName }}
+                {% endif %}
+            {% else %}
+                {% if room.availability.event.start|default(false) %}
+                    Free until {{ room.availability.event.start|date('H:i') }} ({{ (room.booking|last).duration }})
+                {% endif %}
             {% endif %}
         </td>
         <td style="width:10%;" class="text-center">
             {{ seats }}
         </td>
-        <td style="width:10%;" class="text-center">
+
+        <td style="width:25%;" class="text-center">
             {% if booking_enabled and room.booking %}
                 {% set slots %}
 
@@ -150,12 +157,11 @@
                     data-slot="{{ slots|e('html_attr') }}"
                 >Book Now</button>
             {% else %}
-                &nbsp;
-            {% endif %}
-        </td>
-        <td style="width:25%;" class="text-center">
-            {% if room.availability.event.start|default(false) %}
-                {{ room.availability.event.start|date('H:i') }} - {{ room.availability.event.end|date('H:i') }}
+                {% if room.availability.event.start|default(false) %}
+                    {{ room.availability.event.start|date('H:i') }} - {{ room.availability.event.end|date('H:i') }}
+                {% else %}
+                    &nbsp;
+                {% endif %}
             {% endif %}
         </td>
     </tr>

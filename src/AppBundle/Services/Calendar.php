@@ -71,7 +71,16 @@ class Calendar extends BaseService
 
         uasort($rooms, function($a, $b) {
             if ($a['score'] == $b['score']) {
-                return strcmp(str_replace(' ', '', $a['name']), str_replace(' ', '', $b['name']));
+                $name = strcmp(str_replace(' ', '', $a['name']), str_replace(' ', '', $b['name']));
+
+                if ($a['score'] == 4) {
+                    return $name;
+                }
+
+                $startA = strtotime(date("H:i", $a['availability']['event']['start']));
+                $startB = strtotime(date("H:i", $b['availability']['event']['start']));
+
+                return $startA == $startB ? $name : $startA > $startB ? 1 : -1;
             }
 
             return $a['score'] < $b['score'] ? 1 : -1;
